@@ -15,7 +15,7 @@ oauth.register('oidc_entry',
                client_secret=os.environ.get("CLIENT_SECRET"),
                client_id=os.environ.get("CLIENT_ID"),
                server_metadata_url=os.environ.get("SERVER_METADATA_URL"),
-               client_kwargs={'scope': 'openid profile email'})
+               client_kwargs={'scope': 'openid profile email roles'})
 
 @app.route('/')
 def root_page():
