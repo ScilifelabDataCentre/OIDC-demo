@@ -36,12 +36,7 @@ def oidc_authorize():
     """Authorize a login using OpenID Connect (e.g. Elixir AAI)."""
     client = oauth.create_client("oidc_entry")
     token = client.authorize_access_token()
-    if "id_token" in token:
-        user_info = client.parse_id_token(token)
-    else:
-        user_info = client.userinfo()
-
-    return flask.jsonify(user_info)
+    return flask.jsonify(token["userinfo"])
 
 
 @app.route("/logout")
