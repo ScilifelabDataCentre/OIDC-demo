@@ -1,11 +1,10 @@
-FROM python:3.8-alpine
+FROM python:alpine
 
 RUN apk add gcc musl-dev python3-dev libffi-dev openssl-dev rust cargo
 
 COPY ./requirements.txt /requirements.txt
 
-RUN pip3 install -r /requirements.txt
-RUN pip3 install gunicorn
+RUN pip3 install -r /requirements.txt gunicorn
 
 COPY ./ /code/
 WORKDIR /code/
