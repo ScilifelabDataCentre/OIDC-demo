@@ -17,26 +17,25 @@ oauth.register("oidc_entry",
                client_kwargs={"scope": "openid profile email roles"})
 
 @app.route("/")
-def root_page():
+def render_home():
     """List available entries."""
-    return flask.render_template("base.html")
+    return flask.render_template("base.html", user_info=flask.session.get("user_info"))
 
 
 @app.route("/login")
 def oidc_login():
-    """Perform a login using OpenID Connect (e.g. Elixir AAI)."""
-    client = oauth.create_client("oidc_entry")
+    """Perform a login using OpenID Connect."""
     redirect_uri = flask.url_for("oidc_authorize",
                                  _external=True)
-    return client.authorize_redirect(redirect_uri)
+    return oauth.oidc_entry.authorize_redirect(redirect_uri)
 
 
 @app.route("/login/authorize")
 def oidc_authorize():
     """Authorize a login using OpenID Connect (e.g. Elixir AAI)."""
-    client = oauth.create_client("oidc_entry")
-    token = client.authorize_access_token()
-    return flask.jsonify(token)
+    token = oauth.oidc_entry.authorize_access_token()
+    flask.session["user_info"] = token["user_info"]
+    return flask.redirect("/")
 
 
 @app.route("/logout")
@@ -44,8 +43,10 @@ def oidc_logout():
     """Log out from the oidc session"""
     logout_url = os.environ.get("LOGOUT_URL")
     if logout_url:
-        redirect_uri = flask.url_for("root_page",
+        redirect_uri = flask.url_for("render_home",
                                      _external=True)
 
         return flask.redirect(f"{logout_url}?redirect_uri={redirect_uri}")
-    return flask.redirect(f"/")
+    return flask.redirect(redirect_uri)
+
+app.run(host="0.0.0.0", port=5000)

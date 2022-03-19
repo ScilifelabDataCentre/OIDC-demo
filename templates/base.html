@@ -3,16 +3,41 @@
   <title>OIDC Demo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
   </head>
   <body>
     <section class="section">
-      <div class="container">
-        <a class="button" href="/login">Login</a>
-      </div>
+      {% block body %}{% endblock body %}
+      {% if user_info  %}
+      <article class="message">
+	<div class="message-header is-info">
+	  <p>User info from token</p>
+	</div>
+	<div class="message-body">
+	  <table class="table is-striped">
+	    <thead>
+	      <tr>
+		<th>Property</th>
+		<th>Value</th>
+	      </tr>
+	    </thead>
+	    <tbody>
+	      {% for property in user_info %}
+	      <tr> <th>{{ property }}</th> <td>{{ user_info[property] }}</td></tr>
+	      {% endfor %}
+	    </tbody>
+	  </table>
+	</div>
+      </article>
+
       <div class="container">
         <a class="button" href="/logout">Log out</a>
       </div>
+      {% else %}
+      <div class="container">
+	<a class="button" href="/login">Login</a>
+      </div>
+      {% endif %}
     </section>
   </body>
 </html>
