@@ -22,7 +22,7 @@ def root_page():
     return flask.render_template("base.html")
 
 
-@app.route("/login/")
+@app.route("/login")
 def oidc_login():
     """Perform a login using OpenID Connect (e.g. Elixir AAI)."""
     client = oauth.create_client("oidc_entry")
@@ -31,7 +31,7 @@ def oidc_login():
     return client.authorize_redirect(redirect_uri)
 
 
-@app.route("/login/authorize/")
+@app.route("/login/authorize")
 def oidc_authorize():
     """Authorize a login using OpenID Connect (e.g. Elixir AAI)."""
     client = oauth.create_client("oidc_entry")
