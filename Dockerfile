@@ -1,6 +1,7 @@
-FROM python:alpine
+FROM python:latest
 
-RUN apk add gcc musl-dev python3-dev libffi-dev openssl-dev rust cargo
+#RUN apk add gcc musl-dev python3-dev libffi-dev openssl-dev rust cargo
+RUN apt-get -y update && apt-get -y upgrade
 
 COPY ./requirements.txt /requirements.txt
 
