@@ -48,5 +48,3 @@ def oidc_logout():
 
         return flask.redirect(f"{logout_url}?redirect_uri={redirect_uri}")
     return flask.redirect(redirect_uri)
-
-app.run(host="0.0.0.0", port=5000)
