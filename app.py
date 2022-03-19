@@ -43,4 +43,9 @@ def oidc_authorize():
 def oidc_logout():
     """Log out from the oidc session"""
     logout_url = os.environ.get("LOGOUT_URL")
-    return flask.redirect(logout_url)
+    if logout_url:
+        redirect_uri = flask.url_for("root_page",
+                                     _external=True)
+
+        return flask.redirect(f"{logout_url}?redirect_uri={redirect_uri}")
+    return flask.redirect(f"/")
