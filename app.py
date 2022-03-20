@@ -54,7 +54,7 @@ def oidc_logout():
 @app.route("/external-logout")
 def oidc_external_logout():
     """Log out from the oidc session"""
-    flask.current_app.logger.info(dict(flask.request.args))
-    flask.current_app.logger.info(flask.request.json))
+    flask.current_app.logger.info(dict(flask.request.args)
+    flask.current_app.logger.info(flask.request.json)
 #    flask.session.clear()
     return flask.jsonify(flask.request.json)
