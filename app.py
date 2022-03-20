@@ -51,7 +51,7 @@ def oidc_logout():
     return flask.redirect(redirect_uri)
 
 
-@app.route("/external-logout")
+@app.route("/external-logout", methods=["GET", "POST"])
 def oidc_external_logout():
     """Log out from the oidc session"""
     flask.current_app.logger.info(dict(flask.request.args))
