@@ -58,3 +58,10 @@ def oidc_external_logout():
     flask.current_app.logger.info(flask.request.data)
     flask.session.clear()
     return flask.jsonify(flask.request.json)
+
+
+if __name__ != '__main__':
+    # assume the container is running in gunicorn
+    gunicorn_logger = logging.getLogger('gunicorn.error')
+    app.logger.handlers = gunicorn_logger.handlers
+    app.logger.setLevel(gunicorn_logger.level)
