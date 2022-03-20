@@ -1,4 +1,5 @@
 """Demo for OpenID Connect login."""
+import logging
 import os
 
 import flask
