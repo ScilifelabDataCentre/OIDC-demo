@@ -18,7 +18,7 @@ keycloak_openid = KeycloakOpenID(server_url=os.environ.get("SERVER_URL"),
 @app.route("/")
 def render_home():
     """List available entries."""
-    return flask.render_template("base.html", user_info=flask.session.get("user_info"))
+    return flask.render_template("base.html", user_info=flask.session.get("token"))
 
 
 @app.route("/login")
@@ -34,6 +34,7 @@ def oidc_authorize():
     """Authorize a login using OpenID Connect (e.g. Elixir AAI)."""
     flask.current_app.logger.info(dict(flask.request.args))
     flask.current_app.logger.info(flask.request.data)
+    flask.session["token"] = keycloak_openid.token(code=flask.request.args["code"])
     return flask.redirect("/")
 
 
