@@ -26,7 +26,7 @@ def oidc_login():
     """Perform a login using OpenID Connect."""
     redirect_uri = flask.url_for("oidc_authorize",
                                  _external=True)
-    return flask.redirect(keycloak.auth_url(redirect_uri))
+    return flask.redirect(keycloak_openid.auth_url(redirect_uri))
 
 
 @app.route("/login/authorize")
