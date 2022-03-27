@@ -3,19 +3,17 @@ import logging
 import os
 
 import flask
-
-from authlib.integrations.flask_client import OAuth
+from keycloak import KeycloakOpenID
 
 app = flask.Flask(__name__)  # pylint: disable=invalid-name
 
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
 
-oauth = OAuth(app)
-oauth.register("oidc_entry",
-               client_secret=os.environ.get("CLIENT_SECRET"),
-               client_id=os.environ.get("CLIENT_ID"),
-               server_metadata_url=os.environ.get("SERVER_METADATA_URL"),
-               client_kwargs={"scope": "openid profile email roles"})
+keycloak_openid = KeycloakOpenID(server_url=os.environ.get("SERVER_URL"),
+                                 client_id=os.environ.get("CLIENT_ID"),
+                                 realm_name=os.environ.get("REALM_NAME"),
+                                 client_secret_key=os.environ.get("CLIENT_SECRET"),)
+
 
 @app.route("/")
 def render_home():
@@ -28,14 +26,14 @@ def oidc_login():
     """Perform a login using OpenID Connect."""
     redirect_uri = flask.url_for("oidc_authorize",
                                  _external=True)
-    return oauth.oidc_entry.authorize_redirect(redirect_uri)
+    return flask.redirect(keycloak.auth_url(redirect_uri))
 
 
 @app.route("/login/authorize")
 def oidc_authorize():
     """Authorize a login using OpenID Connect (e.g. Elixir AAI)."""
-    token = oauth.oidc_entry.authorize_access_token()
-    flask.session["user_info"] = token["userinfo"]
+    flask.current_app.logger.info(dict(flask.request.args))
+    flask.current_app.logger.info(flask.request.data)
     return flask.redirect("/")
 
 
