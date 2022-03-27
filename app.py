@@ -34,8 +34,9 @@ def oidc_authorize():
     """Authorize a login using OpenID Connect (e.g. Elixir AAI)."""
     flask.current_app.logger.info(dict(flask.request.args))
     flask.current_app.logger.info(flask.request.data)
-    flask.session["token"] = keycloak_openid.token(code=flask.request.args["code"], grant_type="authorization_code")
-    return flask.redirect("/")
+    redirect_uri = flask.url_for("render_home",
+                                 _external=True)
+    flask.session["token"] = keycloak_openid.token(code=flask.request.args["code"], grant_type="authorization_code", redirect_uri=redirect_uri)
 
 
 @app.route("/logout")
