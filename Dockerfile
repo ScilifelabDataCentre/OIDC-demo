@@ -1,8 +1,6 @@
-FROM python:latest
+FROM python:alpine
 
-#RUN apk add gcc musl-dev python3-dev libffi-dev openssl-dev rust cargo
-RUN apt-get -y update && apt-get -y upgrade
-
+RUN apk update && apk upgrade
 COPY ./requirements.txt /requirements.txt
 
 RUN pip3 install -r /requirements.txt gunicorn
